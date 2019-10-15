@@ -1,0 +1,362 @@
+<!-- Gaberial Campese -->
+<!-- Data Visualization -->
+<!-- Individual Project -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<script src="https://gstatic.com/charts/loader.js"></script>
+	<script>
+		google.charts.load('current', {'packages':['corechart']});
+		google.charts.setOnLoadCallback(drawSheets);
+		
+		function drawSheets() {
+			drawSheetName('militarySpending', 'SELECT A,B,C,D,E,F',
+						  militarySpendingResponseHandler);
+			drawSheetName('healthcareSpending', 'SELECT A,B,C,D,E,F',
+						  healthcareSpendingResponseHandler);
+			drawSheetName('educationSpending', 'SELECT A,B,C,D,E,F',
+						  educationSpendingResponseHandler);
+			drawSheetName('mspercentgdp', 'SELECT A,B,C,D,E,F',
+						  militaryGDPResponseHandler);
+			drawSheetName('hspercentgdp', 'SELECT A,B,C,D,E,F',
+						  healthcareGDPResponseHandler);
+			drawSheetName('espercentgdp', 'SELECT A,B,C,D,E,F',
+						  educationGDPResponseHandler);
+			drawSheetName('mspercapGDPpercap', 'SELECT A,F,L',
+						  militaryperCapGDPperCapResponseHandler);
+			drawSheetName('hspercapGDPpercap', 'SELECT A,F,L',
+						  healthcareperCapGDPperCapResponseHandler);
+			drawSheetName('espercapGDPpercap', 'SELECT A,F,L',
+						  educationperCapGDPperCapResponseHandler);
+			drawSheetName('healthcarevsms', 'SELECT A,G,P',
+						  healthcareVsMilitaryResponseHandler);
+			drawSheetName('educationvsms', 'SELECT A,G,P',
+						  educationVsMilitaryResponseHandler);
+			drawSheetName('healthcareSpending', 'SELECT A,H',
+						  fixedHealthcareGrowthResponseHandler);
+			drawSheetName('educationSpending', 'SELECT A,H',
+						  fixedEducationGrowthResponseHandler);
+			drawSheetName('healthcareSpending', 'SELECT A,I',
+						  percentHealthcareGrowthResponseHandler);
+			drawSheetName('educationSpending', 'SELECT A,I',
+						  percentEducationGrowthResponseHandler);
+			} //drawSheets
+		
+		
+		function drawSheetName(sheetName, query, responseHandler) {
+			var queryString = encodeURIComponent(query);
+			var query = new google.visualization.Query(
+				'https://docs.google.com/spreadsheets/d/1VuoJC0EJW8OG4Bslq_H4VADPgoGTQ5iIBHuisO1jGV0/gviz/tq?sheet=' + sheetName + '&headers=1&tq=' +queryString	
+			);
+			query.send(responseHandler);
+		} //draw the sheet name 
+			
+		function militarySpendingResponseHandler(response){
+			//get the data
+			var data = response.getDataTable();
+			data.sort({column: 5, desc:true}); //remember index starts at 0, so we point to column 6 (F) here
+			
+			//set options ; options are always an object
+			var options = {height: 400, 
+						   title: 'Military Spending by Country',
+						   vAxis: {title: 'Spending in Millions($)'},
+						   hAxis: {title: 'Country'}
+			};
+			
+			//create the chart and draw it
+			var chart = new google.visualization.ColumnChart(document.getElementById('military_spending_div'));
+			chart.draw(data, options);
+			
+		} //militarySpendingResponseHandler
+		
+		function healthcareSpendingResponseHandler(response){
+			//get the data
+			var data = response.getDataTable();
+			data.sort({column: 5, desc:true}); //remember index starts at 0, so we point to column 6 (F) here
+			
+			var options = {height: 400, 
+						   title: 'Healthcare Spending by Country',
+						   vAxis: {title: 'Spending in Millions($)'},
+						   hAxis: {title: 'Country'}
+			};
+			
+			var chart = new google.visualization.ColumnChart(document.getElementById('healthcare_spending_div'));
+			chart.draw(data, options);
+			
+		} //healthcareSpendingResponseHandler
+		
+		function educationSpendingResponseHandler(response){
+			var data = response.getDataTable();
+			data.sort({column: 5, desc:true}); //remember index starts at 0, so we point to column 6 (F) here
+			
+			//set options
+			var options = {height: 400, 
+						   title: 'Education Spending by Country',
+						   vAxis: {title: 'Spending in Millions($)'},
+						   hAxis: {title: 'Country'} //label axis
+			};
+			
+			var chart = new google.visualization.ColumnChart(document.getElementById('education_spending_div'));
+			chart.draw(data, options);
+			
+		} //educationSpendingResponseHandler
+		
+		function militaryGDPResponseHandler(response){
+			
+			var data = response.getDataTable();
+			data.sort({column: 5, desc:true}); 
+			
+			var options = {height: 400, 
+						   title: 'Military Spending-GDP Comparison',
+						   colorAxis: {colors: ['red', 'blue']},
+						   vAxis: {title: '% GDP'}
+			};
+
+			var chart = new google.visualization.BubbleChart(document.getElementById('msGDP_div')); //bubble chart
+			chart.draw(data, options);
+			
+		} //militaryGDPResponseHandler
+		
+		function healthcareGDPResponseHandler(response){
+			
+			var data = response.getDataTable();
+			data.sort({column: 5, desc:true}); 
+			
+			var options = {height: 400, 
+						   title: 'Healthcare Spending-GDP Comparison',
+						   colorAxis: {colors: ['red', 'blue']},
+						   vAxis: {title: '% GDP'}
+			};
+
+			var chart = new google.visualization.BubbleChart(document.getElementById('hsGDP_div')); //bubble chart
+			chart.draw(data, options);
+			
+		} //healthcareGDPResponseHandler
+		
+		function educationGDPResponseHandler(response){
+			
+			var data = response.getDataTable();
+			data.sort({column: 5, desc:true}); 
+			
+			var options = {height: 400, 
+						   title: 'Education Spending-GDP Comparison',
+						   colorAxis: {colors: ['red', 'blue']},
+						   vAxis: {title: '% GDP'}
+			};
+
+			var chart = new google.visualization.BubbleChart(document.getElementById('esGDP_div')); //bubble chart
+			chart.draw(data, options);
+			
+		} //educationGDPResponseHandler
+		
+		function militaryperCapGDPperCapResponseHandler(response){
+			
+			var data = response.getDataTable();
+			data.sort({column: 2, desc:true}); 
+			
+			var options = {
+				width: 800,
+				height: 600,
+				title: 'Military Spending Per Capita vs. GDP Per Capita (2016)',
+				legend: {position: 'right'},
+				bar: {groupWidth: '80%'},
+				isStacked: true,
+				vAxis: {title: 'Country'},
+				hAxis: {title: 'Spending (USD)'}
+			};
+
+			var chart = new google.visualization.BarChart(document.getElementById('msperCapGDPperCap_div')); //stacked bar
+			chart.draw(data, options);
+			
+		} //militaryperCapGDPperCapResponseHandler
+		
+		function healthcareperCapGDPperCapResponseHandler(response){
+			
+			var data = response.getDataTable();
+			data.sort({column: 2, desc:true}); 
+			
+			var options = {
+				width: 800,
+				height: 600,
+				title: 'Healthcare Spending Per Capita vs. GDP Per Capita (2016)',
+				legend: {position: 'right'},
+				bar: {groupWidth: '80%'},
+				isStacked: true,
+				vAxis: {title: 'Country'},
+				hAxis: {title: 'Spending (USD)'}
+			};
+
+			var chart = new google.visualization.BarChart(document.getElementById('hsperCapGDPperCap_div')); //stacked bar
+			chart.draw(data, options);
+			
+		} //healthcareperCapGDPperCapResponseHandler
+		
+		function educationperCapGDPperCapResponseHandler(response){
+			
+			var data = response.getDataTable();
+			data.sort({column: 2, desc:true}); 
+			
+			var options = {
+				width: 800,
+				height: 600,
+				title: 'Education Spending Per Capita vs. GDP Per Capita (2016)',
+				legend: {position: 'right'},
+				bar: {groupWidth: '80%'},
+				isStacked: true,
+				vAxis: {title: 'Country'},
+				hAxis: {title: 'Spending (USD)'}
+			};
+
+			var chart = new google.visualization.BarChart(document.getElementById('esperCapGDPperCap_div')); //stacked bar
+			chart.draw(data, options);
+			
+		} //educationperCapGDPperCapResponseHandler
+		
+		
+		function healthcareVsMilitaryResponseHandler(response){
+			
+			var data = response.getDataTable();
+			data.sort({column: 2, desc:true}); 
+			
+			var options = {height: 500,
+						   title: 'Healthcare-Military Spending Comparison (2016)',
+						   colorAxis: {colors: ['red', 'blue']},
+						   vAxis: {title: 'Military Spending (billions $)'},
+						   hAxis: {title: 'Healthcare Spending (billions $)'}
+			};
+
+			var chart = new google.visualization.BubbleChart(document.getElementById('hsVsMs_div')); //bubble chart
+			chart.draw(data, options);
+			
+		} //healthcareVsMilitaryResponseHandler
+		
+		function educationVsMilitaryResponseHandler(response){
+			
+			var data = response.getDataTable();
+			data.sort({column: 2, desc:true}); 
+			
+			var options = {height: 500,
+						   title: 'Education-Military Spending Comparison (2016)',
+						   colorAxis: {colors: ['red', 'blue']},
+						   vAxis: {title: 'Military Spending (billions $)'},
+						   hAxis: {title: 'Education Spending (billions $)'}
+			};
+
+			var chart = new google.visualization.BubbleChart(document.getElementById('esVsMs_div')); //bubble chart
+			chart.draw(data, options);
+			
+		} //educationVsMilitaryResponseHandler
+		
+		function fixedHealthcareGrowthResponseHandler(response){
+			
+			var data = response.getDataTable();
+			data.sort({column: 1, desc:true}); 
+			
+			var options = {
+					height: 400,
+					legend: 'none',
+					title: 'Top 10 Healthcare Fixed Growth (2015-2016)',
+					bars: 'horizontal',
+					hAxis: {title: 'Spending in Millions ($)'},
+					vAxis: {title: 'Country'}
+			};
+
+			var chart = new google.visualization.BarChart(document.getElementById('fixedhs_div')); //bar chart
+			chart.draw(data, options);
+			
+		} //fixedHealthcareGrowthResponseHandler
+		
+		function fixedEducationGrowthResponseHandler(response){
+			
+			var data = response.getDataTable();
+			data.sort({column: 1, desc:true}); 
+			
+			var options = {
+					height: 400,
+					legend: 'none',
+					title: 'Top 10 Education Fixed Growth (2015-2016)',
+					bars: 'horizontal',
+					hAxis: {title: 'Spending in Millions ($)'},
+					vAxis: {title: 'Country'}
+			};
+
+			var chart = new google.visualization.BarChart(document.getElementById('fixedes_div')); //bar chart
+			chart.draw(data, options);
+			
+		} //fixedEducationGrowthResponseHandler
+		
+		function percentHealthcareGrowthResponseHandler(response){
+			
+			var data = response.getDataTable();
+			data.sort({column: 1, desc:true}); 
+			
+			var options = {
+					title: 'Top 10 Healthcare Percent Growth Rate',
+					vAxis: {title: 'Annual Growth Rate'},
+					hAxis: {title: 'Country'},
+					isStacked: true
+			};
+
+			var chart = new google.visualization.SteppedAreaChart(document.getElementById('percenths_div'));
+			chart.draw(data, options);
+		} //percentHealthcareGrowthResponseHandler
+		
+		function percentEducationGrowthResponseHandler(response){
+			
+			var data = response.getDataTable();
+			data.sort({column: 1, desc:true}); 
+			
+			var options = {
+					title: 'Top 10 Education Percent Growth Rate',
+					vAxis: {title: 'Annual Growth Rate'},
+					hAxis: {title: 'Country'},
+					isStacked: true
+			};
+
+			var chart = new google.visualization.SteppedAreaChart(document.getElementById('percentes_div'));
+			chart.draw(data, options);
+		} //percentEducationGrowthResponseHandler
+		
+		
+	</script>	
+
+		
+<body>
+	<h2>Spending for Top Countries</h2>
+	<div id="military_spending_div" style="width: 1000px; height: 500px;"></div>
+	<p></p>
+	<div id="healthcare_spending_div" style="width: 1000px; height: 500px;"></div>
+	<p></p>
+	<div id="education_spending_div" style="width: 1000px; height: 500px;"></div>
+	<p></p>
+	<h2>Spending vs. GDP Comparison</h2>
+	<div id="msGDP_div" style="width: 1000px; height: 500px;"></div>
+	<p></p>
+	<div id="hsGDP_div" style="width: 1000px; height: 500px;"></div>
+	<p></p>
+	<div id="esGDP_div" style="width: 1000px; height: 500px;"></div>
+	<p></p>
+	<h2>Spending Per Capita vs. GDP Per Capita</h2>
+	<div id="msperCapGDPperCap_div" style="width: 1000px; height: 500px;"></div>
+	<p></p>
+	<div id="hsperCapGDPperCap_div" style="width: 1000px; height: 500px;"></div>
+	<p></p>
+	<div id="esperCapGDPperCap_div" style="width: 1000px; height: 500px;"></div>
+	<p></p>
+	<h2>Healthcare and Education vs. Military Spending</h2>
+	<div id="hsVsMs_div" style="width: 1000px; height: 500px;"></div>
+	<p></p>
+	<div id="esVsMs_div" style="width: 1000px; height: 500px;"></div>
+	<p></p>
+	<h2>Fastest Growing Countries</h2>
+	<div id="fixedhs_div" style="width: 1000px; height: 500px;"></div>
+	<p></p>
+	<div id="fixedes_div" style="width: 1000px; height: 500px;"></div>
+	<p></p>
+	<div id="percenths_div" style="width: 1000px; height: 500px;"></div>
+	<p></p>
+	<div id="percentes_div" style="width: 1000px; height: 500px;"></div>
+	<p></p>
+</body>
